@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+    targetNamespace="urn:org:oclc:LOGGING:1.0" 
+    xmlns:tns="urn:org:oclc:LOGGING:1.0" 
+    elementFormDefault="qualified">
+    
+    <xsd:element name="GlobalVariables">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Report" type="tns:ReportProperties"
+                    minOccurs="0" maxOccurs="1" />
+                <xsd:element name="SSHProperties" type="tns:SSHProperties"
+                    minOccurs="0" maxOccurs="1" />   
+                <xsd:element name="username" type="xsd:string"
+                    minOccurs="0" maxOccurs="1" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="Logging">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Description" type="xsd:string"
+                    minOccurs="0" maxOccurs="1" />
+                 <xsd:element name="BaseDirForLogFiles" type="xsd:string"
+                    minOccurs="1" maxOccurs="1" />
+                 <xsd:element name="downloadLogsIntervalInMin" type="xsd:long"
+                    minOccurs="1" maxOccurs="1" />
+                <xsd:element name="Env" type="tns:Env"
+                    minOccurs="1" maxOccurs="7" />
+                <xsd:element name="SSHProperties" type="tns:SSHProperties"
+                    minOccurs="0" maxOccurs="1" />
+                <xsd:element name="Report" type="tns:ReportProperties"
+                    minOccurs="0" maxOccurs="1" />
+                <xsd:element name="MailProperties" type="tns:MailProperties"
+                    minOccurs="0" maxOccurs="1" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:complexType name="Env">
+            <xsd:sequence>
+                <xsd:element name="Description" type="xsd:string"
+                    minOccurs="0" maxOccurs="1" />
+                <xsd:element name="Application" type="tns:Application"
+                    minOccurs="1" maxOccurs="unbounded" />   
+            </xsd:sequence>  
+            <xsd:attribute name="name" type="xsd:string"/>  
+    </xsd:complexType>
+    
+    
+    
+     <xsd:complexType name="Application">
+        <xsd:annotation>
+            <xsd:documentation>Root element denoting the logging properties
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="Description" type="xsd:string"
+                minOccurs="0" maxOccurs="1" />
+            <xsd:element name="Profile" type="tns:Profile"
+                minOccurs="1" maxOccurs="unbounded" />
+            <xsd:element name="Report" type="tns:ReportProperties"
+                    minOccurs="0" maxOccurs="1" />
+            <xsd:element name="MailProperties" type="tns:MailProperties"
+                    minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+        
+        <xsd:attribute name="name" type="xsd:string"/>
+    </xsd:complexType>
+    
+    
+    
+    <xsd:complexType name="Profile">
+        <xsd:annotation>
+            <xsd:documentation>Information about a single Profile. Profile is used
+            to connect remotely/locally via SSH to fetch the relevant logging information from the specified log files
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="logFile" type="xsd:string"
+                minOccurs="0" maxOccurs="unbounded" />
+            <xsd:element name="host" type="xsd:string"
+                minOccurs="0" maxOccurs="1" />
+                <xsd:element name="port" type="xsd:string"
+                minOccurs="0" maxOccurs="1" />
+            <xsd:element name="username" type="xsd:string"
+                minOccurs="0" maxOccurs="1" />
+            
+        </xsd:sequence>
+        <xsd:attribute name="isLocal" type="xsd:boolean" default="false"/>
+        <xsd:attribute name="name" type="xsd:string"/>
+    </xsd:complexType>
+    
+    <xsd:simpleType name="ProfileName">
+         <xsd:restriction base="xsd:string">
+             <xsd:enumeration value="CIRC_UI"/>
+             <xsd:enumeration value="CIRC_BL"/>
+             <xsd:enumeration value="CIRC_BL_AND_UI"/>
+             <xsd:enumeration value="ACQ_UI"/>
+             <xsd:enumeration value="ACQ_BL"/>
+             <xsd:enumeration value="ACQ_BL_AND_UI"/>
+             <xsd:enumeration value="LMAN"/>
+             <xsd:enumeration value="KBWC"/>
+             <xsd:enumeration value="NOTIFICATION"/>
+             <xsd:enumeration value="IRP"/>
+             <xsd:enumeration value="SERVICE_DIR"/>
+         </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:complexType name="SSHProperties">
+        <xsd:annotation>
+            <xsd:documentation>Information about SSH Private key and passphrase
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="privateKeyLocation" type="xsd:string"
+                minOccurs="1" maxOccurs="1" />
+            <xsd:element name="passphrase" type="xsd:string"
+                minOccurs="1" maxOccurs="1" />            
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="ReportProperties">
+        <xsd:annotation>
+            <xsd:documentation>Information about Report Properties
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="type" type="tns:ReportType"
+                minOccurs="0" maxOccurs="1" default="PDF"/>
+            <xsd:element name="outputLocation" type="xsd:string"
+                minOccurs="1" maxOccurs="1" />            
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="MailProperties">
+        <xsd:annotation>
+            <xsd:documentation>Information about Email Properties
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="smtpHost" type="xsd:string"
+                minOccurs="0" maxOccurs="1" default="PDF"/>
+            <xsd:element name="smtpPort" type="xsd:integer"
+                minOccurs="0" maxOccurs="1" />
+            <xsd:element name="smtpAuth" type="xsd:boolean"
+                minOccurs="0" maxOccurs="1" /> 
+            <xsd:element name="username" type="xsd:string"
+                minOccurs="0" maxOccurs="1" />   
+            <xsd:element name="password" type="xsd:string"
+                minOccurs="0" maxOccurs="1" />   
+            <xsd:element name="from" type="xsd:string"
+                minOccurs="0" maxOccurs="1" />   
+            <xsd:element name="to" type="xsd:string"
+                minOccurs="0" maxOccurs="unbounded" />      
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:simpleType name="ReportType">
+         <xsd:restriction base="xsd:string">
+             <xsd:enumeration value="PDF"/>
+             <xsd:enumeration value="HTML"/>
+             <xsd:enumeration value="EXCEL"/>
+         </xsd:restriction>
+    </xsd:simpleType>
+</xsd:schema>
